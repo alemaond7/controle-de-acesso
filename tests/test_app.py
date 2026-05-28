@@ -1,4 +1,9 @@
 import pytest
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from app import app
 
 @pytest.fixture
@@ -20,7 +25,9 @@ def test_login_admin(client):
         follow_redirects=True
     )
 
-    assert b"Área Administrativa" in response.data
+    texto = response.get_data(as_text=True)
+
+    assert "Área Administrativa" in texto
 
 def test_login_user(client):
 
@@ -33,7 +40,9 @@ def test_login_user(client):
         follow_redirects=True
     )
 
-    assert b"Área do Usuário" in response.data
+    texto = response.get_data(as_text=True)
+
+    assert "Área do Usuário" in texto
 
 def test_invalid_login(client):
 
@@ -46,4 +55,6 @@ def test_invalid_login(client):
         follow_redirects=True
     )
 
-    assert b"Usuário ou senha inválidos" in response.data
+    texto = response.get_data(as_text=True)
+
+    assert "Usuário ou senha inválidos" in texto
